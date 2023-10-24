@@ -15,10 +15,11 @@ def index():
 
 # Server Rendered Routes using only Flask and Jinja Templates
 
-
+## Read 
 @app.route("/todo_static", methods=["GET"])
 def todo_page_static():
     return render_template("todo_static.html", tasks=tasks)
+
 
 ## Create
 @app.route("/add_task_static", methods=["POST"])
@@ -28,18 +29,30 @@ def add_task_static():
     tasks.append({"title": title, "content": content, "editing": False})
     return redirect(url_for("todo_page_static"))
 
+
 ## Update
 @app.route("/edit_task_static/<int:task_id>", methods=["POST"])
 def edit_task_static(task_id):
     title = request.form.get("title")
     content = request.form.get("content")
-    if "editing" in tasks[task_id] and tasks[task_id]["editing"]:
-        tasks[task_id] = {"title": title, "content": content, "editing": False}
+
+    current_task = tasks[task_id]
+    if "editing" in current_task:
+        if current_task["editing"] is True:
+            current_task["title"] = title
+            current_task["content"] = content
+            current_task["editing"] = False
+        else:
+            for task in tasks:
+                task["editing"] = False
+            current_task["editing"] = True
     else:
         for task in tasks:
             task["editing"] = False
-        tasks[task_id]["editing"] = True
+        current_task["editing"] = True
+
     return redirect(url_for("todo_page_static"))
+
 
 ## Delete
 @app.route("/delete_task_static/<int:task_id>", methods=["POST"])
@@ -49,7 +62,6 @@ def delete_task_static(task_id):
 
 
 # Hybrid Rendered Routes using htmx, flask and Jinja Templates
-
 
 @app.route("/todo_dynamic", methods=["GET"])
 def todo_page_dynamic():
