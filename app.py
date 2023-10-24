@@ -20,14 +20,31 @@ def index():
 def todo_page_static():
     return render_template("todo_static.html", tasks=tasks)
 
-
+## Create
 @app.route("/add_task_static", methods=["POST"])
 def add_task_static():
     title = request.form.get("title")
     content = request.form.get("content")
+    tasks.append({"title": title, "content": content, "editing": False})
+    return redirect(url_for("todo_page_static"))
 
-    tasks.append({"title": title, "content": content})
+## Update
+@app.route("/edit_task_static/<int:task_id>", methods=["POST"])
+def edit_task_static(task_id):
+    title = request.form.get("title")
+    content = request.form.get("content")
+    if "editing" in tasks[task_id] and tasks[task_id]["editing"]:
+        tasks[task_id] = {"title": title, "content": content, "editing": False}
+    else:
+        for task in tasks:
+            task["editing"] = False
+        tasks[task_id]["editing"] = True
+    return redirect(url_for("todo_page_static"))
 
+## Delete
+@app.route("/delete_task_static/<int:task_id>", methods=["POST"])
+def delete_task_static(task_id):
+    tasks.pop(task_id)
     return redirect(url_for("todo_page_static"))
 
 
