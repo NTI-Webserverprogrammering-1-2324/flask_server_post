@@ -1,0 +1,45 @@
+{
+  "image": "mcr.microsoft.com/devcontainers/universal:2",
+  "hostRequirements": {
+    "cpus": 4
+  },
+  "waitFor": "onCreateCommand",
+  "updateContentCommand": "pip install -r requirements.txt",
+  "postCreateCommand": "",
+  "postAttachCommand": "python app.py",
+  "portsAttributes": {
+    "5000": {
+      "label": "Application",
+      "onAutoForward": "openPreview"
+    }
+  },
+  "customizations": {
+    "codespaces": {
+      "openFiles": [
+        "templates/index.html"
+      ]
+    },
+    "vscode": {
+      "extensions": [
+        "njpwerner.autodocstring",
+        "samuelcolvin.jinjahtml",
+        "ms-python.black-formatter",
+        "github.copilot",
+        "github.copilot-chat",
+        "ms-python.vscode-pylance",
+        "ms-python.python"
+      ],
+      "settings": {
+        "python.formatting.provider": "black",
+        "editor.formatOnSave": true,
+        "html.autoClosingTags": true,
+        "html.autoCreateQuotes": true,
+        "html.format.indentHandlebars": true,
+        "terminal.integrated.shell.linux": "/bin/bash"
+      }
+    }
+  },
+  "forwardPorts": [
+    5000
+  ]
+}
