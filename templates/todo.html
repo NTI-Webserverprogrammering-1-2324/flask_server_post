@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="sv">
+
+    <head>
+        <!-- Basic page needs -->
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Serverrenderad Todo-sida</title>
+
+        <!-- Styles -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    </head>
+
+    <body>
+        <main class="d-flex flex-wrap flex-md-nowrap vh-100">
+            <!-- Sidebar for adding tasks -->
+            <div class="offcanvas offcanvas-start col-12 col-sm-8 col-md-3 bg-dark text-white" tabindex="-1"
+                id="offcanvasMenu" aria-labelledby="offcanvasMenuLabel">
+                <div class="offcanvas-header">
+                    <h3 id="offcanvasMenuLabel">Lägg till uppgift</h3>
+                    <button type="button" class="btn-close text-reset bg-light" data-bs-dismiss="offcanvas"
+                        aria-label="Close"></button>
+                </div>
+                <div class="offcanvas-body">
+                    <!-- Form for adding a new task -->
+                    <form action="{{ url_for('add_task') }}" method="post">
+                        <div class="mb-3">
+                            <label for="title" class="form-label">Titel:</label>
+                            <input type="text" id="title" name="title" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="content" class="form-label">Innehåll:</label>
+                            <textarea id="content" name="content" rows="5" class="form-control" required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Lägg till</button>
+                    </form>
+
+                    <!-- Search form -->
+                    <div class="mt-4">
+                        <h5>Sök uppgift med ID</h5>
+                        <!-- Form to search for a task by ID -->
+                        <form action="{{ url_for('search_task') }}" method="post">
+                            <div class="mb-3">
+                                <input type="number" name="task_id" min="0" class="form-control"
+                                    placeholder="Ange uppgifts-ID" required>
+                                <button type="submit" class="btn btn-secondary mt-2">Sök</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Static sidebar for larger screens -->
+            <div class="col-md-3 p-4 bg-dark text-white d-none d-md-block">
+                <h3>Lägg till uppgift</h3>
+                <!-- Duplicated form for adding a new task (for larger screens) -->
+                <form action="{{ url_for('add_task') }}" method="post">
+                    <div class="mb-3">
+                        <label for="title" class="form-label">Titel:</label>
+                        <input type="text" id="title" name="title" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="content" class="form-label">Innehåll:</label>
+                        <textarea id="content" name="content" rows="5" class="form-control" required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Lägg till</button>
+                </form>
+
+                <div class="mt-4">
+                    <h5>Sök uppgift med ID</h5>
+                    <!-- Form to search for a task by ID -->
+                    <form action="{{ url_for('search_task') }}" method="post">
+                        <div class="mb-3">
+                            <input type="number" name="task_id" min="0" class="form-control"
+                                placeholder="Ange uppgifts-ID" required>
+                            <button type="submit" class="btn btn-secondary mt-2">Sök</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Main content area -->
+            <div class="col-12 col-md-9 p-4" style="background-color: #f7f7f7; overflow-y: auto">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h3 class="mb-3">Uppgifter</h3>
+                    <!-- Button to toggle the offcanvas menu on smaller screens -->
+                    <button class="menu-btn btn d-md-none" type="button" data-bs-toggle="offcanvas"
+                        data-bs-target="#offcanvasMenu" aria-controls="offcanvasMenu">
+                        <!-- SVG icon for menu button -->
+                        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" class="bi bi-list"
+                            viewBox="0 0 24 24">
+                            <circle cx="12" cy="12" r="10" stroke="#000000" stroke-width="1" fill="transparent" />
+                            <path fill="#000000"
+                                d="M6 9.5a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5zm0 3a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5zm0 3a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5z" />
+                        </svg>
+                    </button>
+                </div>
+
+                <!-- Dynamic content area for tasks -->
+                <div class="row g-3">
+                    {% if not tasks and task_found is not defined %}
+                    <!-- Message if no tasks are present initially -->
+                    <div class="col-12">
+                        <div class="alert alert-info text-center" role="alert">
+                            Inga uppgifter tillagda. Använd formuläret för att lägga till en ny uppgift.
+                        </div>
+                    </div>
+                    {% elif not tasks and task_found == false %}
+                    <!-- Message if a search was made but the task was not found -->
+                    <div class="col-12">
+                        <div class="alert alert-warning text-center" role="alert">
+                            Ingen uppgift hittades med angivet ID.
+                        </div>
+                    </div>
+                    {% else %}
+                    <!-- Tasks display -->
+                    {% for task in tasks %}
+                    <div class="col-12 col-sm-6 col-lg-4">
+                        <div class="card shadow">
+                            <!-- Check if the task is being edited -->
+                            {% if task.editing %}
+                            <!-- Form to edit the task -->
+                            <div class="card-body">
+                                <form action="{{ url_for('edit_task', task_id=loop.index0) }}" method="post">
+                                    <div class="mb-2">
+                                        <label for="title-{{ task.id }}" class="form-label">Titel:</label>
+                                        <input type="text" id="title-{{ task.id }}" name="title" class="form-control"
+                                            value="{{ task.title }}" required>
+                                    </div>
+                                    <div class="mb-2">
+                                        <label for="content-{{ task.id }}" class="form-label">Innehåll:</label>
+                                        <textarea id="content-{{ task.id }}" name="content" class="form-control"
+                                            rows="3" required>{{ task.content }}</textarea>
+                                    </div>
+                                    <div class="d-flex justify-content-end">
+                                        <button type="submit" class="btn btn-primary me-2">Spara</button>
+                                    </div>
+                                </form>
+                            </div>
+                            {% else %}
+                            <!-- Display the task details -->
+                            <div class="card-body">
+                                <h5 class="card-title">{{ task.title }}</h5>
+                                <p class="card-text">{{ task.content }}</p>
+                                <div class="d-flex justify-content-end mt-4">
+                                    <form action="{{ url_for('edit_task', task_id=loop.index0) }}" method="post"
+                                        class="me-2">
+                                        <button type="submit" class="btn btn-warning">Redigera</button>
+                                    </form>
+                                    <form action="{{ url_for('delete_task', task_id=loop.index0) }}" method="post">
+                                        <button type="submit" class="btn btn-danger">Ta bort</button>
+                                    </form>
+                                </div>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                    {% endif %}
+                </div>
+            </div>
+        </main>
+        <!-- Bootstrap JavaScript bundle -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    </body>
+
+</html>
