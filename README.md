@@ -93,5 +93,5 @@ Kom ihåg att `app.run()` är avsedd för utveckling och testning. När du är r
 
 ---
 
-> _**Om du har några frågor eller behöver ytterligare förtydliganden, tveka inte att fråga. Denna guide är här för att hjälpa dig att få en djupare förståelse av Flask och fungera som en resurs när du bygger din webbapplikation. Lycka till på din Flask-resa!  
+> _**Om du har några frågor eller behöver ytterligare förtydliganden, tveka inte att fråga.  
 KaahinAtNTI**_
