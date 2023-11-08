@@ -1,422 +1,421 @@
 <!DOCTYPE html>
 <html lang="sv">
 
-    <head>
-        <!-- Character set definition -->
-        <meta charset="UTF-8">
-        <!-- Responsive viewport settings -->
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <!-- Page description for improved SEO -->
-        <meta name="description"
-            content="Utforska användningen av POST i Flask för CRUD-operationer genom en interaktiv Todo-app. Steg-för-steg handledning i vårt interaktiva gränssnitt.">
-        <!-- Bootstrap CSS for styling -->
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-        <!-- Bootstrap Icons for icons -->
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css" rel="stylesheet">
-        <!-- Title of the webpage -->
-        <title>CRUD-operationer med Flask POST i en Todo-app</title>
-    </head>
+<head>
+    <!-- Character set definition -->
+    <meta charset="UTF-8">
+    <!-- Responsive viewport settings -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Page description for improved SEO -->
+    <meta name="description"
+        content="Utforska användningen av POST i Flask för CRUD-operationer genom en interaktiv Todo-app. Steg-för-steg handledning i vårt interaktiva gränssnitt.">
+    <!-- Bootstrap CSS for styling -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons for icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- Title of the webpage -->
+    <title>CRUD-operationer med Flask POST i en Todo-app</title>
+</head>
 
-    <body class="d-flex flex-column flex-md-row">
-        <!-- Sidebar content -->
-        <aside class="col-md-4 col-lg-3 px-4 py-5 bg-dark text-white vh-100 overflow-auto position-fixed">
-            <!-- Title of the section -->
-            <h1 class="fs-3 lh-1 mb-4">CRUD-operationer med POST i Flask</h1>
-            <!-- Description for users -->
-            <p class="text-white fs-6">
-                En djupdykning i hanteringen av serverförfrågningar i Flask med fokus på POST-metoden, vilket är
-                kritiskt för att genomföra CRUD-operationer. Vi kommer att utforska hur man skapar nya resurser
-                (Create),
-                läser befintlig data (Read), uppdaterar existerande poster (Update) och tar bort dem (Delete) genom att
-                använda POST-begäran i Flask. Alla dessa koncept kommer att demonstreras med hjälp av en praktisk
-                Todo-app.
-            </p>
-            <!-- Link to the Todo app -->
-            <div class="mt-4">
-                <a href="{{ url_for('todo') }}" class="btn btn-primary" aria-label="Gå till Todo-appen">
-                    Gå till Todo-appen
-                </a>
-            </div>
-        </aside>
-        <!-- Page Content -->
-        <div class="col-md-8 col-lg-9 offset-md-4 offset-lg-3 d-flex flex-column">
-            <main class="container-fluid px-4 bg-light">
-                <!-- Main content section -->
-                <section class="py-md-5">
-                    <div class="mb-4">
-                        
-                        <div clas="container mb-5">
-                            <h1 class="fw-bold mb-4">
-                                Skapande av en Flask Server med POST och GET för dynamiska webbapplikationer
-                            </h1>
-                            <p class="lead text-muted mb-4">
-                                Denna Flask-applikation utforskar användningen av POST-metoden i kombination med GET
-                                för
-                                att
-                                utföra grundläggande CRUD (Skapa, Läsa, Uppdatera, Ta bort) operationer, vilka utgör
-                                grundstenen
-                                för dynamiska webbapplikationer. Även om vi kommer att demonstrera dessa koncept
-                                inom
-                                ramen
-                                för en
-                                Todo-app, tillämpas principerna brett på vilken webbapplikation som helst som
-                                strävar
-                                efter
-                                att
-                                erbjuda en komplett uppsättning av funktionaliteter för interaktion med data.
-                            </p>
-                        </div>
+<body class="d-flex flex-column flex-md-row">
+    <!-- Sidebar content -->
+    <aside class="col-md-4 col-lg-3 px-4 py-5 bg-dark text-white vh-100 overflow-auto position-fixed">
+        <!-- Title of the section -->
+        <h1 class="fs-3 lh-1 mb-4">CRUD-operationer med POST i Flask</h1>
+        <!-- Description for users -->
+        <p class="text-white fs-6">
+            En djupdykning i hanteringen av serverförfrågningar i Flask med fokus på POST-metoden, vilket är
+            kritiskt för att genomföra CRUD-operationer. Vi kommer att utforska hur man skapar nya resurser
+            (Create),
+            läser befintlig data (Read), uppdaterar existerande poster (Update) och tar bort dem (Delete) genom att
+            använda POST-begäran i Flask. Alla dessa koncept kommer att demonstreras med hjälp av en praktisk
+            Todo-app.
+        </p>
+        <!-- Link to the Todo app -->
+        <div class="mt-4">
+            <a href="{{ url_for('todo') }}" class="btn btn-primary" aria-label="Gå till Todo-appen">
+                Gå till Todo-appen
+            </a>
+        </div>
+    </aside>
+    <!-- Page Content -->
+    <div class="col-md-8 col-lg-9 offset-md-4 offset-lg-3 d-flex flex-column">
+        <main class="container-fluid px-4 bg-light">
+            <!-- Main content section -->
+            <section class="py-md-5">
+                <div class="mb-4">
 
-                        <div class="container my-5">
-                            <h2 class="fw-bold mb-4">Att förstå POST-metoden</h2>
-                            <p class="lead text-muted">
-                                Med erfarenhet av GET-metoden från vår tidigare applikation (ni hittar det i
-                                <a href="https://github.com/NTI-Webserverprogrammering-1-2324/flask_server_get"
-                                    target="_blank">repot flask_server_get</a>
-                                ), tar vi nu steget vidare för att
-                                utforska
-                                POST-metoden i Flask. Genom att implementera den i en Todo-app för CRUD-operationer,
-                                kommer
-                                ni att se hur POST kompletterar GET. Efter att ha bemästrat dessa två HTTP-metoder,
-                                kommer
-                                ni att ha en solid grund för att skapa dynamiska webbplatser med en bred
-                                funktionalitet.
-                            </p>
-                        </div>
+                    <div clas="container mb-5">
+                        <h1 class="fw-bold mb-4">
+                            Skapande av en Flask Server med POST och GET för dynamiska webbapplikationer
+                        </h1>
+                        <p class="lead text-muted mb-4">
+                            Denna Flask-applikation utforskar användningen av POST-metoden i kombination med GET
+                            för
+                            att
+                            utföra grundläggande CRUD (Skapa, Läsa, Uppdatera, Ta bort) operationer, vilka utgör
+                            grundstenen
+                            för dynamiska webbapplikationer. Även om vi kommer att demonstrera dessa koncept
+                            inom
+                            ramen
+                            för en
+                            Todo-app, tillämpas principerna brett på vilken webbapplikation som helst som
+                            strävar
+                            efter
+                            att
+                            erbjuda en komplett uppsättning av funktionaliteter för interaktion med data.
+                        </p>
+                    </div>
 
-                        <div class="container my-5">
-                            <h2 class="fw-bold mb-4">Grundläggande Koncept i Flask</h2>
-                            <p class="lead text-muted">
-                                Denna sektion utforskar ett spektrum av koncept nödvändiga för att bygga en
-                                Flask-applikation,
-                                från server-rendering och routing till att hantera POST-begäran och mer avancerade
-                                funktioner.
-                                Följande information är utformad för att ge en grundlig förståelse som kan
-                                appliceras i
-                                dina
-                                webbutvecklingsprojekt.
-                            </p>
-                        </div>
+                    <div class="container my-5">
+                        <h2 class="fw-bold mb-4">Att förstå POST-metoden</h2>
+                        <p class="lead text-muted">
+                            Med erfarenhet av GET-metoden från vår tidigare applikation (ni hittar det i
+                            <a href="https://github.com/NTI-Webserverprogrammering-1-2324/flask_server_get"
+                                target="_blank">repot flask_server_get</a>
+                            ), tar vi nu steget vidare för att
+                            utforska
+                            POST-metoden i Flask. Genom att implementera den i en Todo-app för CRUD-operationer,
+                            kommer
+                            ni att se hur POST kompletterar GET. Efter att ha bemästrat dessa två HTTP-metoder,
+                            kommer
+                            ni att ha en solid grund för att skapa dynamiska webbplatser med en bred
+                            funktionalitet.
+                        </p>
+                    </div>
 
-                        <!-- Collapsible accordion for different topics-->
-                        <div class="accordion accordion-flush" id="infoAccordion">
-                            <!-- Server-rendering explanation section -->
-                            <div class="accordion-item">
-                                <h3 class="accordion-header" id="headingServerRendering">
-                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                        data-bs-target="#collapseServerRendering" aria-expanded="false"
-                                        aria-controls="collapseServerRendering">
-                                        Serverrendering i webbutveckling
-                                    </button>
-                                </h3>
-                                <div id="collapseServerRendering" class="accordion-collapse collapse"
-                                    aria-labelledby="headingServerRendering" data-bs-parent="#infoAccordion">
-                                    <div class="accordion-body">
-                                        <h2 class="mb-3">Vad innebär serverrendering?</h2>
-                                        <p>
-                                            Serverrendering, ofta kallad server-side rendering (SSR), är en teknik
-                                            inom
-                                            webbutveckling där webbservern skapar en färdig HTML-sida för varje
-                                            webbplatsbesökare. Detta innebär att all nödvändig kod, inklusive HTML,
-                                            CSS
-                                            och första steget av JavaScript, exekveras på servern och skickar en
-                                            färdig
-                                            webbsida till användarens webbläsare.
-                                        </p>
-                                        <p>
-                                            I Flask kan serverrendering åstadkommas genom att använda
-                                            <code>render_template</code>
-                                            -funktionen för att dynamiskt generera
-                                            HTML-innehåll från template-filer innan sidan skickas till klienten.
-                                            Detta
-                                            skapar en snabbare initial laddning jämfört med client-side rendering,
-                                            eftersom innehållet visas snabbare för användaren.
-                                        </p>
-                                        <p>
-                                            Denna teknik är särskilt användbar för SEO (sökmotoroptimering), vilket
-                                            är
-                                            konsten att förbättra en webbsidas ranking på sökmotorers
-                                            resultatlistor,
-                                            eftersom sökmotorer lättare kan indexera innehåll som redan är
-                                            förrenderat
-                                            på servern. Mer detaljer om SEO kommer att diskuteras senare i kursen.
-                                        </p>
-                                        <p>
-                                            Exempel på serverrendering i vår Flask-app inkluderar generering av en
-                                            Todo-lista som är direkt synlig när användaren anländer till sidan, utan
-                                            ytterligare klient-sida JavaScript-behandling.
-                                        </p>
-                                    </div>
+                    <div class="container my-5">
+                        <h2 class="fw-bold mb-4">Grundläggande Koncept i Flask</h2>
+                        <p class="lead text-muted">
+                            Denna sektion utforskar ett spektrum av koncept nödvändiga för att bygga en
+                            Flask-applikation,
+                            från server-rendering och routing till att hantera POST-begäran och mer avancerade
+                            funktioner.
+                            Följande information är utformad för att ge en grundlig förståelse som kan
+                            appliceras i
+                            dina
+                            webbutvecklingsprojekt.
+                        </p>
+                    </div>
+
+                    <!-- Collapsible accordion for different topics-->
+                    <div class="accordion accordion-flush" id="infoAccordion">
+                        <!-- Server-rendering explanation section -->
+                        <div class="accordion-item">
+                            <h3 class="accordion-header" id="headingServerRendering">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#collapseServerRendering" aria-expanded="false"
+                                    aria-controls="collapseServerRendering">
+                                    Serverrendering i webbutveckling
+                                </button>
+                            </h3>
+                            <div id="collapseServerRendering" class="accordion-collapse collapse"
+                                aria-labelledby="headingServerRendering" data-bs-parent="#infoAccordion">
+                                <div class="accordion-body">
+                                    <h2 class="mb-3">Vad innebär serverrendering?</h2>
+                                    <p>
+                                        Serverrendering, ofta kallad server-side rendering (SSR), är en teknik
+                                        inom
+                                        webbutveckling där webbservern skapar en färdig HTML-sida för varje
+                                        webbplatsbesökare. Detta innebär att all nödvändig kod, inklusive HTML,
+                                        CSS
+                                        och första steget av JavaScript, exekveras på servern och skickar en
+                                        färdig
+                                        webbsida till användarens webbläsare.
+                                    </p>
+                                    <p>
+                                        I Flask kan serverrendering åstadkommas genom att använda
+                                        <code>render_template</code>
+                                        -funktionen för att dynamiskt generera
+                                        HTML-innehåll från template-filer innan sidan skickas till klienten.
+                                        Detta
+                                        skapar en snabbare initial laddning jämfört med client-side rendering,
+                                        eftersom innehållet visas snabbare för användaren.
+                                    </p>
+                                    <p>
+                                        Denna teknik är särskilt användbar för SEO (sökmotoroptimering), vilket
+                                        är
+                                        konsten att förbättra en webbsidas ranking på sökmotorers
+                                        resultatlistor,
+                                        eftersom sökmotorer lättare kan indexera innehåll som redan är
+                                        förrenderat
+                                        på servern. Mer detaljer om SEO kommer att diskuteras senare i kursen.
+                                    </p>
+                                    <p>
+                                        Exempel på serverrendering i vår Flask-app inkluderar generering av en
+                                        Todo-lista som är direkt synlig när användaren anländer till sidan, utan
+                                        ytterligare klient-sida JavaScript-behandling.
+                                    </p>
                                 </div>
                             </div>
-                            <!-- POST request explanation section -->
-                            <div class="accordion-item">
-                                <h3 class="accordion-header" id="headingPostRequest">
-                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                        data-bs-target="#collapsePostRequest" aria-expanded="false"
-                                        aria-controls="collapsePostRequest">
-                                        Hantering av POST-begäran för uppgifter i Flask
-                                    </button>
-                                </h3>
-                                <div id="collapsePostRequest" class="accordion-collapse collapse"
-                                    aria-labelledby="headingPostRequest" data-bs-parent="#infoAccordion">
-                                    <div class="accordion-body">
-                                        <h2>Användning av POST-begäran för Uppgiftshantering i Flask</h2>
-                                        <p>
-                                            I vår Flask-applikation används POST-begärningar för att skapa,
-                                            uppdatera
-                                            och ta bort uppgifter. Detta demonstrerar hur vi kan hantera
-                                            dataöverföring
-                                            från klienten till servern för olika aspekter av uppgiftshantering.
-                                        </p>
-                                        <h3>Lägga till Uppgifter</h3>
-                                        <p>
-                                            Användare kan lägga till uppgifter genom att fylla i ett formulär som
-                                            skickas till servern via en POST-begäran till
-                                            <code>/add_task</code>
-                                            .
-                                            Flask-routen tar emot uppgiftsinformationen och lägger till den i en
-                                            global
-                                            lista, varpå användaren omdirigeras för att se den nya uppgiften i
-                                            listan.
-                                        </p>
-                                        <h3>Redigera och Ta bort Uppgifter</h3>
-                                        <p>
-                                            För att redigera eller ta bort en uppgift, används också
-                                            POST-begärningar,
-                                            som hanteras av routerna
-                                            <code>
+                        </div>
+                        <!-- POST request explanation section -->
+                        <div class="accordion-item">
+                            <h3 class="accordion-header" id="headingPostRequest">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#collapsePostRequest" aria-expanded="false"
+                                    aria-controls="collapsePostRequest">
+                                    Hantering av POST-begäran för uppgifter i Flask
+                                </button>
+                            </h3>
+                            <div id="collapsePostRequest" class="accordion-collapse collapse"
+                                aria-labelledby="headingPostRequest" data-bs-parent="#infoAccordion">
+                                <div class="accordion-body">
+                                    <h2>Användning av POST-begäran för Uppgiftshantering i Flask</h2>
+                                    <p>
+                                        I vår Flask-applikation används POST-begärningar för att skapa,
+                                        uppdatera
+                                        och ta bort uppgifter. Detta demonstrerar hur vi kan hantera
+                                        dataöverföring
+                                        från klienten till servern för olika aspekter av uppgiftshantering.
+                                    </p>
+                                    <h3>Lägga till Uppgifter</h3>
+                                    <p>
+                                        Användare kan lägga till uppgifter genom att fylla i ett formulär som
+                                        skickas till servern via en POST-begäran till
+                                        <code>/add_task</code>
+                                        .
+                                        Flask-routen tar emot uppgiftsinformationen och lägger till den i en
+                                        global
+                                        lista, varpå användaren omdirigeras för att se den nya uppgiften i
+                                        listan.
+                                    </p>
+                                    <h3>Redigera och Ta bort Uppgifter</h3>
+                                    <p>
+                                        För att redigera eller ta bort en uppgift, används också
+                                        POST-begärningar,
+                                        som hanteras av routerna
+                                        <code>
                                                 /edit_task/
                                                 <int:task_id>
                                             </code>
-                                            och
-                                            <code>
+                                        och
+                                        <code>
                                                 /delete_task/
                                                 <int:task_id>
                                             </code>
-                                            respektive. Även om det skulle vara
-                                            mer i linje med RESTful-principer att använda PUT och DELETE-metoder,
-                                            utforskar vi dessa i senare delar av kursen.
-                                        </p>
-                                        <h3>Flasks Hantering av HTTP-metoder</h3>
-                                        <p>
-                                            Flask stödjer olika HTTP-metoder för att utföra CRUD-operationer. I
-                                            denna
-                                            applikation används främst POST-begärningar för att manipulera
-                                            uppgifter,
-                                            och vi kommer att se hur PUT och DELETE kan användas i framtiden för att
-                                            följa RESTful-principer mer noggrant.
-                                        </p>
-                                        <ul>
-                                            <li>
-                                                <strong>GET</strong>
-                                                : Används för att hämta och visa uppgifter.
-                                            </li>
-                                            <li>
-                                                <strong>POST</strong>
-                                                : Används för att skapa, uppdatera eller ta bort
-                                                uppgifter, förberedande för en mer RESTful implementation i
-                                                framtiden.
-                                            </li>
-                                        </ul>
-                                        <h3>Viktigt om Debug-läge</h3>
-                                        <p>
-                                            Notera att applikationen körs i debug-läge för att underlätta utveckling
-                                            och
-                                            felsökning. Detta läge bör inaktiveras när applikationen flyttas till en
-                                            produktionsmiljö för att förhindra säkerhetsrisker.
-                                        </p>
-                                    </div>
+                                        respektive. Även om det skulle vara
+                                        mer i linje med RESTful-principer att använda PUT och DELETE-metoder,
+                                        utforskar vi dessa i senare delar av kursen.
+                                    </p>
+                                    <h3>Flasks Hantering av HTTP-metoder</h3>
+                                    <p>
+                                        Flask stödjer olika HTTP-metoder för att utföra CRUD-operationer. I
+                                        denna
+                                        applikation används främst POST-begärningar för att manipulera
+                                        uppgifter,
+                                        och vi kommer att se hur PUT och DELETE kan användas i framtiden för att
+                                        följa RESTful-principer mer noggrant.
+                                    </p>
+                                    <ul>
+                                        <li>
+                                            <strong>GET</strong>
+                                            : Används för att hämta och visa uppgifter.
+                                        </li>
+                                        <li>
+                                            <strong>POST</strong>
+                                            : Används för att skapa, uppdatera eller ta bort
+                                            uppgifter, förberedande för en mer RESTful implementation i
+                                            framtiden.
+                                        </li>
+                                    </ul>
+                                    <h3>Viktigt om Debug-läge</h3>
+                                    <p>
+                                        Notera att applikationen körs i debug-läge för att underlätta utveckling
+                                        och
+                                        felsökning. Detta läge bör inaktiveras när applikationen flyttas till en
+                                        produktionsmiljö för att förhindra säkerhetsrisker.
+                                    </p>
                                 </div>
                             </div>
-                            <!-- Routes explanation section -->
-                            <div class="accordion-item">
-                                <h3 class="accordion-header" id="headingRoutes">
-                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                        data-bs-target="#collapseRoutes" aria-expanded="false"
-                                        aria-controls="collapseRoutes">
-                                        Routes i Todo-appen
-                                    </button>
-                                </h3>
-                                <div id="collapseRoutes" class="accordion-collapse collapse"
-                                    aria-labelledby="headingRoutes" data-bs-parent="#infoAccordion">
-                                    <div class="accordion-body">
-                                        <h2 class="text-center my-3">Routes i Todo-appen</h2>
-                                        <p class="mb-4">
-                                            Flask förenklar definitionen av
-                                            <strong>routes</strong>
-                                            , som är essentiella
-                                            för att koppla en URL till en funktion i vår Todo-app. Varje route
-                                            hanterar
-                                            en unik del av applikationens funktionalitet:
-                                        </p>
-                                        <ul class="list-group">
-                                            <li class="list-group-item d-flex align-items-center">
-                                                <svg class="bi me-3" width="16" height="16">
-                                                    <use xlink:href="#house-door-fill" />
-                                                </svg>
-                                                <div>
-                                                    <strong>Hem Route ("/"):</strong>
-                                                    Visar startsidan där användaren landar först.
-                                                    <span class="text-muted">(Startpunkt)</span>
-                                                </div>
-                                            </li>
-                                            <li class="list-group-item d-flex align-items-center">
-                                                <svg class="bi me-3" width="16" height="16">
-                                                    <use xlink:href="#list-task" />
-                                                </svg>
-                                                <div>
-                                                    <strong>Todo Route ("/todo"):</strong>
-                                                    Presenterar en översikt över alla uppgifter.
-                                                    <span class="text-muted">(Uppgiftslista)</span>
-                                                </div>
-                                            </li>
-                                            <li class="list-group-item d-flex align-items-center">
-                                                <svg class="bi me-3" width="16" height="16">
-                                                    <use xlink:href="#plus-circle-fill" />
-                                                </svg>
-                                                <div>
-                                                    <strong>Lägga till Uppgift Route ("/add_task"):</strong>
-                                                    Skapar nya uppgifter genom ett formulär.
-                                                    <span class="text-muted">(Ny Uppgift)</span>
-                                                </div>
-                                            </li>
-                                            <li class="list-group-item d-flex align-items-center">
-                                                <svg class="bi me-3" width="16" height="16">
-                                                    <use xlink:href="#search" />
-                                                </svg>
-                                                <div>
-                                                    <strong>Sök Uppgift Route ("/search_task/"):</strong>
-                                                    Söker och visar en specifik uppgift med ID.
-                                                    <span class="text-muted">(Sök)</span>
-                                                </div>
-                                            </li>
-                                            <li class="list-group-item d-flex align-items-center">
-                                                <svg class="bi me-3" width="16" height="16">
-                                                    <use xlink:href="#eye-fill" />
-                                                </svg>
-                                                <div>
-                                                    <strong>
-                                                        Visa Uppgift Route ("/view_task/&lt;int:task_id&gt;"):
-                                                    </strong>
-                                                    Detaljvisning av en enskild uppgift.
-                                                    <span class="text-muted">(Detaljer)</span>
-                                                </div>
-                                            </li>
-                                            <li class="list-group-item d-flex align-items-center">
-                                                <svg class="bi me-3" width="16" height="16">
-                                                    <use xlink:href="#pencil-fill" />
-                                                </svg>
-                                                <div>
-                                                    <strong>
-                                                        Redigera Uppgift Route ("/edit_task/&lt;task_id&gt;"):
-                                                    </strong>
-                                                    Ändrar information för en uppgift.
-                                                    <span class="text-muted">(Redigering)</span>
-                                                </div>
-                                            </li>
-                                            <li class="list-group-item d-flex align-items-center">
-                                                <svg class="bi me-3" width="16" height="16">
-                                                    <use xlink:href="#trash-fill" />
-                                                </svg>
-                                                <div>
-                                                    <strong>
-                                                        Ta bort Uppgift Route ("/delete_task/&lt;int:task_id&gt;"):
-                                                    </strong>
-                                                    Raderar en uppgift från listan.
-                                                    <span class="text-muted">(Ta bort)</span>
-                                                </div>
-                                            </li>
-                                        </ul>
-                                    </div>
+                        </div>
+                        <!-- Routes explanation section -->
+                        <div class="accordion-item">
+                            <h3 class="accordion-header" id="headingRoutes">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#collapseRoutes" aria-expanded="false"
+                                    aria-controls="collapseRoutes">
+                                    Routes i Todo-appen
+                                </button>
+                            </h3>
+                            <div id="collapseRoutes" class="accordion-collapse collapse" aria-labelledby="headingRoutes"
+                                data-bs-parent="#infoAccordion">
+                                <div class="accordion-body">
+                                    <h2 class="text-center my-3">Routes i Todo-appen</h2>
+                                    <p class="mb-4">
+                                        Flask förenklar definitionen av
+                                        <strong>routes</strong>
+                                        , som är essentiella
+                                        för att koppla en URL till en funktion i vår Todo-app. Varje route
+                                        hanterar
+                                        en unik del av applikationens funktionalitet:
+                                    </p>
+                                    <ul class="list-group">
+                                        <li class="list-group-item d-flex align-items-center">
+                                            <svg class="bi me-3" width="16" height="16">
+                                                <use xlink:href="#house-door-fill" />
+                                            </svg>
+                                            <div>
+                                                <strong>Hem Route ("/"):</strong>
+                                                Visar startsidan där användaren landar först.
+                                                <span class="text-muted">(Startpunkt)</span>
+                                            </div>
+                                        </li>
+                                        <li class="list-group-item d-flex align-items-center">
+                                            <svg class="bi me-3" width="16" height="16">
+                                                <use xlink:href="#list-task" />
+                                            </svg>
+                                            <div>
+                                                <strong>Todo Route ("/todo"):</strong>
+                                                Presenterar en översikt över alla uppgifter.
+                                                <span class="text-muted">(Uppgiftslista)</span>
+                                            </div>
+                                        </li>
+                                        <li class="list-group-item d-flex align-items-center">
+                                            <svg class="bi me-3" width="16" height="16">
+                                                <use xlink:href="#plus-circle-fill" />
+                                            </svg>
+                                            <div>
+                                                <strong>Lägga till Uppgift Route ("/add_task"):</strong>
+                                                Skapar nya uppgifter genom ett formulär.
+                                                <span class="text-muted">(Ny Uppgift)</span>
+                                            </div>
+                                        </li>
+                                        <li class="list-group-item d-flex align-items-center">
+                                            <svg class="bi me-3" width="16" height="16">
+                                                <use xlink:href="#search" />
+                                            </svg>
+                                            <div>
+                                                <strong>Sök Uppgift Route ("/search_task/"):</strong>
+                                                Söker och visar en specifik uppgift med ID.
+                                                <span class="text-muted">(Sök)</span>
+                                            </div>
+                                        </li>
+                                        <li class="list-group-item d-flex align-items-center">
+                                            <svg class="bi me-3" width="16" height="16">
+                                                <use xlink:href="#eye-fill" />
+                                            </svg>
+                                            <div>
+                                                <strong>
+                                                    Visa Uppgift Route ("/view_task/&lt;int:task_id&gt;"):
+                                                </strong>
+                                                Detaljvisning av en enskild uppgift.
+                                                <span class="text-muted">(Detaljer)</span>
+                                            </div>
+                                        </li>
+                                        <li class="list-group-item d-flex align-items-center">
+                                            <svg class="bi me-3" width="16" height="16">
+                                                <use xlink:href="#pencil-fill" />
+                                            </svg>
+                                            <div>
+                                                <strong>
+                                                    Redigera Uppgift Route ("/edit_task/&lt;task_id&gt;"):
+                                                </strong>
+                                                Ändrar information för en uppgift.
+                                                <span class="text-muted">(Redigering)</span>
+                                            </div>
+                                        </li>
+                                        <li class="list-group-item d-flex align-items-center">
+                                            <svg class="bi me-3" width="16" height="16">
+                                                <use xlink:href="#trash-fill" />
+                                            </svg>
+                                            <div>
+                                                <strong>
+                                                    Ta bort Uppgift Route ("/delete_task/&lt;int:task_id&gt;"):
+                                                </strong>
+                                                Raderar en uppgift från listan.
+                                                <span class="text-muted">(Ta bort)</span>
+                                            </div>
+                                        </li>
+                                    </ul>
                                 </div>
                             </div>
-                            <!-- CRUD-operation explanation section -->
-                            <div class="accordion-item">
-                                <h3 class="accordion-header" id="headingCRUD">
-                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                        data-bs-target="#collapseCRUD" aria-expanded="false"
-                                        aria-controls="collapseCRUD">
-                                        CRUD-operationer i Flask
-                                    </button>
-                                </h3>
-                                <div id="collapseCRUD" class="accordion-collapse collapse" aria-labelledby="headingCRUD"
-                                    data-bs-parent="#infoAccordion">
-                                    <div class="accordion-body">
-                                        <h2 class="mb-3">Vad är CRUD i Flask?</h2>
-                                        <p>
-                                            CRUD står för Skapa (Create), Läsa (Read), Uppdatera (Update) och Ta
-                                            bort
-                                            (Delete). Det är en grundläggande uppsättning operationer som används
-                                            för
-                                            att hantera data i en webbapplikation. I Flask, precis som i många andra
-                                            webbapplikationsramverk, används CRUD-operationer för att interagera med
-                                            en
-                                            databas och utföra olika handlingar på data.
-                                        </p>
-                                        <p>
-                                            Med CRUD-operationer i Flask kan du skapa nya poster, hämta befintliga
-                                            poster, uppdatera befintliga poster och ta bort poster från en databas.
-                                            Dessa operationer utgör kärnan i många webbapplikationer och är särskilt
-                                            användbara när du hanterar information som användare, inlägg, produkter
-                                            och
-                                            mycket mer.
-                                        </p>
-                                        <p>
-                                            Vi kommer att utforska varje del av CRUD i Flask och visa hur du
-                                            implementerar dessa operationer i en Todo-app. Detta kommer att ge dig
-                                            en
-                                            djupare förståelse för hur Flask hanterar data och ger dig färdigheter
-                                            att
-                                            skapa dynamiska webbapplikationer med fullständig funktionalitet för att
-                                            interagera med data.
-                                        </p>
-                                    </div>
+                        </div>
+                        <!-- CRUD-operation explanation section -->
+                        <div class="accordion-item">
+                            <h3 class="accordion-header" id="headingCRUD">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#collapseCRUD" aria-expanded="false" aria-controls="collapseCRUD">
+                                    CRUD-operationer i Flask
+                                </button>
+                            </h3>
+                            <div id="collapseCRUD" class="accordion-collapse collapse" aria-labelledby="headingCRUD"
+                                data-bs-parent="#infoAccordion">
+                                <div class="accordion-body">
+                                    <h2 class="mb-3">Vad är CRUD i Flask?</h2>
+                                    <p>
+                                        CRUD står för Skapa (Create), Läsa (Read), Uppdatera (Update) och Ta
+                                        bort
+                                        (Delete). Det är en grundläggande uppsättning operationer som används
+                                        för
+                                        att hantera data i en webbapplikation. I Flask, precis som i många andra
+                                        webbapplikationsramverk, används CRUD-operationer för att interagera med
+                                        en
+                                        databas och utföra olika handlingar på data.
+                                    </p>
+                                    <p>
+                                        Med CRUD-operationer i Flask kan du skapa nya poster, hämta befintliga
+                                        poster, uppdatera befintliga poster och ta bort poster från en databas.
+                                        Dessa operationer utgör kärnan i många webbapplikationer och är särskilt
+                                        användbara när du hanterar information som användare, inlägg, produkter
+                                        och
+                                        mycket mer.
+                                    </p>
+                                    <p>
+                                        Vi kommer att utforska varje del av CRUD i Flask och visa hur du
+                                        implementerar dessa operationer i en Todo-app. Detta kommer att ge dig
+                                        en
+                                        djupare förståelse för hur Flask hanterar data och ger dig färdigheter
+                                        att
+                                        skapa dynamiska webbapplikationer med fullständig funktionalitet för att
+                                        interagera med data.
+                                    </p>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </section>
-            </main>
-            <!-- Footer content -->
-            <footer class="py-4 bg-dark text-white text-center">
-                <div class="container">
-                    <!-- Title for the footer section -->
-                    <h4 class="fs-5 mb-3">Demonstration av Flask CRUD-operationer</h4>
-                    <!-- Description of the Todo application functionality -->
-                    <p class="text-white mb-4">
-                        Denna applikation tjänar som en praktisk utforskning av GET- och
-                        POST-begäranden inom ramen för en Todo-app. Den demonstrerar implementeringen av
-                        CRUD-operationer och visar mångsidigheten med GET- och POST-metoderna. Applikationen lyfter fram
-                        de dynamiska möjligheterna med server-sidig rendering och hantering av formulär med Flask. Den
-                        är en del av kursen "Webbserverprogrammering 1" på NTI Gymnasiet Örebro.
-                    </p>
-                    <!-- Developer credit -->
-                    <p>
-                        Utvecklad av
-                        <a href="https://github.com/KaahinAtNTI" target="_blank" class="text-reset fw-bold"
-                            rel="noopener noreferrer">KaahinAtNTI</a>
-                        för läsåret 2023/24.
-                    </p>
-                    <!-- Copyright and license information -->
-                    <p>
-                        © 2023
-                        <a href="https://github.com/KaahinAtNTI" target="_blank" class="text-reset"
-                            rel="noopener noreferrer">KaahinAtNTI</a>
-                        . Licensierad under
-                        <a href="https://opensource.org/licenses/MIT" target="_blank" class="text-reset"
-                            rel="noopener noreferrer">MIT-licensen</a>
-                        .
-                    </p>
                 </div>
-            </footer>
-        </div>
-        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
-            integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
-            crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"
-            integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+"
-            crossorigin="anonymous"></script>
-    </body>
+            </section>
+        </main>
+        <!-- Footer content -->
+        <footer class="py-4 bg-dark text-white text-center">
+            <div class="container">
+                <!-- Title for the footer section -->
+                <h4 class="fs-5 mb-3">Demonstration av Flask CRUD-operationer</h4>
+                <!-- Description of the Todo application functionality -->
+                <p class="text-white mb-4">
+                    Denna applikation tjänar som en praktisk utforskning av GET- och
+                    POST-begäranden inom ramen för en Todo-app. Den demonstrerar implementeringen av
+                    CRUD-operationer och visar mångsidigheten med GET- och POST-metoderna. Applikationen lyfter fram
+                    de dynamiska möjligheterna med server-sidig rendering och hantering av formulär med Flask. Den
+                    är en del av kursen "Webbserverprogrammering 1" på NTI Gymnasiet Örebro.
+                </p>
+                <!-- Developer credit -->
+                <p>
+                    Utvecklad av
+                    <a href="https://github.com/KaahinAtNTI" target="_blank" class="text-reset fw-bold"
+                        rel="noopener noreferrer">KaahinAtNTI</a>
+                    för läsåret 2023/24.
+                </p>
+                <!-- Copyright and license information -->
+                <p>
+                    © 2023
+                    <a href="https://github.com/KaahinAtNTI" target="_blank" class="text-reset"
+                        rel="noopener noreferrer">KaahinAtNTI</a>
+                    . Licensierad under
+                    <a href="https://opensource.org/licenses/MIT" target="_blank" class="text-reset"
+                        rel="noopener noreferrer">MIT-licensen</a>
+                    .
+                </p>
+            </div>
+        </footer>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+        integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"
+        integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+"
+        crossorigin="anonymous"></script>
+</body>
 
 </html>
